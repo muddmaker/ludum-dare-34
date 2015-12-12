@@ -1,7 +1,7 @@
 --[[ requirements ]]--
 local class = require("lib.class")
 
-hex = require("src.hex.hex")
+local hex = require("src.hex.hex")
 local cell = require("src.hex.cell")
 
 stats = {unitsAlive = {}}
@@ -23,12 +23,13 @@ local timeSinceLastTick = 0
 function love.update(dt)
 	immuneSystem:update()
 	camera:update(dt)
+	hexMap:update(dt)
 
 	local TICK_SPEED = 0.5 -- 1/number
 	timeSinceLastTick = timeSinceLastTick + dt
 	while timeSinceLastTick > TICK_SPEED do -- maybe it's multiple times a frame
 		if updating then
-			hexMap:update()
+			hexMap:regUpdate()
 		end
 		timeSinceLastTick = timeSinceLastTick - TICK_SPEED
 	end

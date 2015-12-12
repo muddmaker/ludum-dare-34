@@ -3,8 +3,8 @@ local cell = class:subclass()
 
 local colors = {
 	neutral = {200, 200, 200},
-	immune = {50, 100, 200},
-	virus = {200, 20, 20}
+	immune  = {50,  100, 200},
+	virus   = {200, 20,  20}
 }
 
 function cell:init(map, x, y, z, size, hp, damage, regen, defense, team)
@@ -13,7 +13,8 @@ function cell:init(map, x, y, z, size, hp, damage, regen, defense, team)
 	self.x = x
 	self.y = y
 	self.z = z
-	self.size = size
+	self.size = 0
+	self.maxSize = size
 
 	self.team = team
 	self.color = colors[team] or {0, 0, 0}
@@ -95,7 +96,7 @@ function cell:getCorner(i)
 			cy + math.sin(angle_rad) * self.size
 end
 
-function cell:update(dt)
+function cell:regUpdate(dt)
 	self.hp = self.hp + self.regen
 	for neighbor in self:neighbors() do
 		if neighbor.team ~= self.team and neighbor.team ~= 'neutral' then
@@ -111,6 +112,13 @@ function cell:update(dt)
 			neighbor.mapHP = 100
 			neighbor.def = 0
 		end
+	end
+end
+
+function cell:update(dt)
+	self.size = self.size + dt * 100
+	if self.size > self.maxSize then
+		self.size = self.maxSize
 	end
 end
 
